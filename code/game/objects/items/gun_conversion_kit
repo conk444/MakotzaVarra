@@ -1,0 +1,48 @@
+/obj/item/weaponcrafting/gun_conversion_kit
+	name = "IRMG weapon conversion kit"
+	desc = "A kit full of plum polymer, yellow paint, and tactical greebles. It has enough materials to convert a few compatible firearms to IRMG specifications."
+	icon = 'icons/obj/improvised.dmi'
+	icon_state = "kitsuitcase" //placeholder until we can get, like, a brown one, I guess?
+	w_class = WEIGHT_CLASS_BULKY //It's got about a toolbox worth of greebles.
+	custom_materials = list(datum/material/iron = 500, datum/material/plastic = 2000)
+	var/uses = 5
+	var/source_gun = list(/obj/item/gun/ballistic/automatic/smg/skm_carbine, /obj/item/gun/ballistic/shotgun/automatic/bulldog, /obj/item/gun/ballistic/automatic/assault/skm/pirate, /obj/item/gun/ballistic/automatic/assault/skm, /obj/item/gun/energy/sharplite/x12, /obj/item/gun/ballistic/automatic/pistol/podium, /obj/item/gun/ballistic/automatic/pistol/challenger, /obj/item/gun/ballistic/automatic/smg/resolution, /obj/item/gun/ballistic/automatic/pistol/rattlesnake, /obj/item/gun/ballistic/automatic/marksman/f4, /obj/item/gun/ballistic/automatic/marksman/f90)
+
+	/obj/item/gun_conversion_kit/examine(mob/user)
+	. = ..()
+	. += "A warning label on the side notes that firearms should be fully unloaded before being modified, to avoid risk of accidental discharge."
+	. += "It can be used [uses] more times."
+
+/obj/item/gun_conversion_kit/can_attach(obj/gun)
+	if (!(gun.type in source_gun))
+		to_chat(loc, span_warning("You flip through the manual to find how to modify this, but it doesn't seem to have an entry."))
+		return FALSE
+	if (uses <= 0)
+		to_chat(loc, span_warning("You open [src] to grab some parts, but it's empty. Damn.))
+		return FALSE
+	return TRUE
+/obj/item/gun_conversion_kit/attach(obj/gun)
+		var/source_gun = new result_gun
+	qdel(source_gun)
+	playsound(get_turf(source_gun),'sound/items/ratchet.ogg',50,TRUE)
+	result_gun.gun_wear = source_gun.gun_wear //This thing doesn't touch the actual mechanisms of the gun, however grody they may be
+	if source_gun = list(/obj/item/gun/ballistic/automatic/assault/skm/pirate, /obj/item/gun/ballistic/automatic/assault/skm)
+		loot = (/obj/item/gun/ballistic/automatic/assault/skm/inteq)
+	if source_gun = (/obj/item/gun/ballistic/automatic/smg/skm_carbine)
+		loot = (/obj/item/gun/ballistic/automatic/smg/skm_carbine/inteq)
+	if source_gun = (/obj/item/gun/ballistic/shotgun/automatic/bulldog)
+		loot = (/obj/item/gun/ballistic/shotgun/automatic/bulldog_inteq)
+	if source_gun = (/obj/item/gun/energy/sharplite/x12)
+		loot = (/obj/item/gun/energy/sharplite/x12/inteq_)
+	if source_gun (/obj/item/gun/ballistic/automatic/pistol/podium)
+		loot = (/obj/item/gun/ballistic/automatic/pistol/podium_inteq)
+	if source_gun = (/obj/item/gun/ballistic/automatic/pistol/challenger)
+		loot = (/obj/item/gun/ballistic/automatic/pistol/challenger_inteq)
+	if source_gun = (/obj/item/gun/ballistic/automatic/smg/resolution)
+		loot = (/obj/item/gun/ballistic/automatic/smg/resolution_inteq)
+	if source_gun = (obj/item/gun/ballistic/automatic/pistol/rattlesnake)
+		loot = (obj/item/gun/ballistic/automatic/pistol/rattlesnake/inteq)
+	if source_gun = (/obj/item/gun/ballistic/automatic/marksman/f4)
+		loot = (/obj/item/gun/ballistic/automatic/marksman/f4_indie)
+	if source_gun = (/obj/item/gun/ballistic/automatic/marksman/f90)
+		loot = (/obj/item/gun/ballistic/automatic/marksman/f90/inteq)
